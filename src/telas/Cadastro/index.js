@@ -4,6 +4,7 @@ import Botao from "../../componentes/Botao";
 import { EntradaTexto } from "../../componentes/EntradaTexto";
 import estilos from "./estilos";
 import { cadastrar } from "../../servicos/requisicoesFirebase";
+import { Alerta } from "../../componentes/Alerta";
 
 export default function Cadastro({ navigation }) {
   const [email, setEmail] = useState("");
@@ -22,29 +23,23 @@ export default function Cadastro({ navigation }) {
     } else if (confirmaSenha === "") {
       setMessageError("O campo confirmar senha é obrigatório");
       setStatusError("confirmaSenha");
-    } else if(senha != confirmaSenha){
-      setMessageError('As senhas não conferem');
-      setStatusError('confirmaSenha');
+    } else if (senha != confirmaSenha) {
+      setMessageError("As senhas não conferem");
+      setStatusError("confirmaSenha");
+    } else {
+      const resultado = await cadastrar(email, senha);
+      if (resultado == "sucesso") {
+        setMessageError("Cadastro realizado com sucesso");
+        setEmail("");
+        setSenha("");
+        setConfirmaSenha("");
         } else {
-
-        
-
-
-    const resultado = await cadastrar(email, senha);
-    if(resultado=='sucesso'){
-      Alert.alert('Cadastro realizado com sucesso');
-      setEmail("");
-      setSenha("");
-      setConfirmaSenha("");
-      setStatusError("");
-      setMessageError("");
+        setStatusError("firebase");
+        setMessageError(resultado);
+        console.log("depois de 9 meses", resultado);
+      }
     }
-    else{
-      Alert.alert(resultado);
-    }
-    
   }
-} 
 
   return (
     <View style={estilos.container}>
@@ -52,7 +47,7 @@ export default function Cadastro({ navigation }) {
         label="E-mail"
         value={email}
         onChangeText={(texto) => setEmail(texto)}
-        error={(statusError == "email")}
+        error={statusError == "email"}
         messageError={messageError}
       />
       <EntradaTexto
@@ -60,7 +55,7 @@ export default function Cadastro({ navigation }) {
         value={senha}
         onChangeText={(texto) => setSenha(texto)}
         secureTextEntry
-        error={(statusError == "senha")}
+        error={statusError == "senha"}
         messageError={messageError}
       />
 
@@ -71,6 +66,12 @@ export default function Cadastro({ navigation }) {
         secureTextEntry
         error={statusError == "confirmaSenha"}
         messageError={messageError}
+      />
+
+      <Alerta
+        mensagem={messageError}
+        error={statusError == "firebase"}
+        setError={setStatusError}
       />
 
       <Botao onPress={() => realizarCadastro()}>CADASTRAR</Botao>
