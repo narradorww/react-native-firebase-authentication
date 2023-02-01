@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Alert, View } from "react-native";
+import React, { useState } from "react";
+import { View } from "react-native";
 import Botao from "../../componentes/Botao";
 import { EntradaTexto } from "../../componentes/EntradaTexto";
 import estilos from "./estilos";
-import { cadastrar } from "../../servicos/requisicoesFirebase";
+import { cadastrar} from "../../servicos/requisicoesFirebase";
 import { Alerta } from "../../componentes/Alerta";
 
 export default function Cadastro({ navigation }) {
@@ -36,7 +36,7 @@ export default function Cadastro({ navigation }) {
         } else {
         setStatusError("firebase");
         setMessageError(resultado);
-        console.log("depois de 9 meses", resultado);
+        
       }
     }
   }
@@ -72,7 +72,7 @@ export default function Cadastro({ navigation }) {
         mensagem={messageError}
         error={statusError == "firebase"}
         setError={setStatusError}
-        duracao={5000}
+        duracao={1800}
       />
 
       <Botao onPress={() => realizarCadastro()}>CADASTRAR</Botao>
